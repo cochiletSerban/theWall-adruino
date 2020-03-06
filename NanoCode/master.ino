@@ -55,14 +55,16 @@ class ESPMaster {
     void writeData(uint8_t * data, size_t len) {
       uint8_t i = 0;
       digitalWrite(_ss_pin, LOW);
-//      SPI.transfer(0x02);
-//      SPI.transfer(0x00);
-      while (len-- && i < 32) {
-        SPI.transfer(data[i++]);
-      }
-      while (i++ < 32) {
-        SPI.transfer(0);
-      }
+      SPI.transfer(0x02);
+      SPI.transfer(0x00);
+      
+      SPI.transfer((uint8_t)(rand() % (60 + 1 - 0) + 0));
+//      while (len-- && i < 32) {
+//        SPI.transfer(data[i++]);
+//      }
+//      while (i++ < 32) {
+//        SPI.transfer(0);
+//      }
       digitalWrite(_ss_pin, HIGH);
     }
 
@@ -95,7 +97,7 @@ void setup() {
   SPI.begin();
   esp.begin();
   delay(1000);
-  send("Hello Slave!");
+//  send("Hello Slave!");
 }
 
 void loop() {

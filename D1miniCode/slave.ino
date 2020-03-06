@@ -22,8 +22,13 @@ void setup() {
   // and the buffer is autofilled with zeroes if data is less than 32 bytes long
   // It's up to the user to implement protocol for handling data length
   SPISlave.onData([](uint8_t * data, size_t len) {
-    Serial.printf("Question: %s\n", (char *)data);
-    (void) len;
+
+        Serial.printf("songId: %d\n", data[0]);
+//             Serial.printf("Question: %d\n", data[1]);
+//                  Serial.printf("Question: %d\n", data[2]);
+//    Serial.printf("Question: %s\n", (char *)data);
+    
+//    (void) len;
 //    if (message.equals("Hello Slave!")) {
 //      SPISlave.setData("Hello Master!");
 //    } else if (message.equals("Are you alive?")) {
@@ -33,7 +38,6 @@ void setup() {
 //    } else {
 //      SPISlave.setData("Say what?");
 //    }
-//    Serial.printf("Question: %s\n", (char *)data);
   });
 
   // The master has read out outgoing data buffer
