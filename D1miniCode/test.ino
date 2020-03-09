@@ -34,6 +34,7 @@ void loop() {
     http.addHeader("Content-Type", "application/json");
 
     char buffer[20];
+    if (songId == 61) songId = 0;
     sprintf(buffer, "{\"song\":\"%d\"}", songId);
 
     int httpResponseCode = http.POST(buffer);

@@ -1,3 +1,36 @@
+#include <SPI.h>
+
+class ESPMaster {
+  private:
+    uint8_t _ss_pin;
+    void _pulseSS() {
+      digitalWrite(_ss_pin, HIGH);
+      delayMicroseconds(5);
+      digitalWrite(_ss_pin, LOW);
+    }
+  public:
+    ESPMaster(uint8_t pin): _ss_pin(pin) {}
+    void begin() {
+      pinMode(_ss_pin, OUTPUT);
+      _pulseSS();
+    }
+    void writeData(uint8_t data) {
+      _pulseSS();
+      SPI.transfer(0x02);
+      SPI.transfer(0x00);
+      SPI.transfer(data);
+      _pulseSS();
+    }
+};
+
+ESPMaster esp(SS);
+
+void send(uint8_t message) {
+  Serial.println(message);
+  esp.writeData(message);
+  delay(10);
+}
+
 byte controlPins[] = {
   B00000000,
   B10000000,
@@ -18,9 +51,15 @@ byte controlPins[] = {
 };
 
 void setup() {
-  Serial.begin(9600);
-  DDRD = B11110000; // set D4-D7 to Output and D3-D2 to input
-  DDRB = B00000011; // set D8-D9 to Ouput and D10-D13 to input
+  Serial.begin(115200);
+  SPI.begin();
+  esp.begin();
+  // DDRD = B11110000; // set D4-D7 to Output and D3-D2 to input
+  for (int i = 4; i < 10; i++) {
+    pinMode(i, OUTPUT);
+  }
+  pinMode(3, INPUT);
+  // DDRB = B00000011; // set D8-D9 to Ouput and D10-D13 to input
 }
 
 void setInputPinToMuxPin(int muxPin) {
@@ -30,10 +69,12 @@ void setInputPinToMuxPin(int muxPin) {
 void selectMux(int mux) {
   switch(mux) {
     case 0:
-      PORTB = B00000010;
+      digitalWrite(8, LOW);
+      digitalWrite(9, HIGH);
       break;
     case 1:
-      PORTB = B00000001;
+      digitalWrite(8, HIGH);
+      digitalWrite(9, LOW);
       break;
     case 2:
       digitalWrite(8, HIGH);
@@ -55,7 +96,9 @@ void getActiveAlbum() {
     setInputPinToMuxPin(i % 16);
     if ( digitalRead(3) == 1 ) {
       Serial.println(i);
-      // write to i2c to be sent to d2 mini
+      // write to SPI to be sent to d2 mini
+      if (i == 0) send(61); 
+      send(i);
     };
   }
 }
