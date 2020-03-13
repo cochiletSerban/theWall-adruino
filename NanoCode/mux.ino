@@ -59,6 +59,8 @@ void setup() {
     pinMode(i, OUTPUT);
   }
   pinMode(3, INPUT);
+  pinMode(A5, OUTPUT);
+  pinMode(A4, OUTPUT);
   // DDRB = B00000011; // set D8-D9 to Ouput and D10-D13 to input
 }
 
@@ -71,18 +73,26 @@ void selectMux(int mux) {
     case 0:
       digitalWrite(8, LOW);
       digitalWrite(9, HIGH);
+      digitalWrite(A5, HIGH);
+      digitalWrite(A4, HIGH);
       break;
     case 1:
       digitalWrite(8, HIGH);
       digitalWrite(9, LOW);
+      digitalWrite(A5, HIGH);
+      digitalWrite(A4, HIGH);
       break;
     case 2:
       digitalWrite(8, HIGH);
       digitalWrite(9, HIGH);
+      digitalWrite(A5, LOW);
+      digitalWrite(A4, HIGH);
       break;
     case 3:
       digitalWrite(8, HIGH);
       digitalWrite(9, HIGH);
+      digitalWrite(A5, HIGH);
+      digitalWrite(A4, LOW);
       break;
   }
 }
