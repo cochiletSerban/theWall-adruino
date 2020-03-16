@@ -107,7 +107,7 @@ void getActiveAlbum() {
     if ( digitalRead(3) == 1 ) {
       Serial.println(i);
       // write to SPI to be sent to d2 mini
-      if (i == 0) send(61); 
+      if (i == 0) send(100);
       send(i);
     };
   }
